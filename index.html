@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Food App</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="CSS/style.css" />
 </head>
 <body>
   <div class="app-shell">
@@ -27,8 +27,8 @@
       <div class="hero-banner">
         <div class="hero-banner-copy">
           <span class="hero-kicker">PROMO DEL DÍA</span>
-          <h2 id="promoTitle">2x1 en pizzas grandes</h2>
-          <p id="promoText">Pedí tu combo favorito y armá el pedido por WhatsApp en segundos.</p>
+          <h2 id="promoTitle">Combos, promos y delivery rápido</h2>
+          <p id="promoText">Elegí categoría, personalizá tu pedido y envialo por WhatsApp en segundos.</p>
         </div>
         <div class="hero-banner-art">🍕</div>
       </div>
@@ -47,7 +47,6 @@
             <p>Elegí una categoría para ver el menú</p>
           </div>
         </div>
-
         <div class="categories-grid" id="categoriesGrid"></div>
       </section>
 
@@ -136,7 +135,7 @@
 
           <div class="field full">
             <label for="generalNotes">Notas generales</label>
-            <textarea id="generalNotes" rows="3" placeholder="Ej: tocar timbre, sin servilletas, mandar cambio de $20.000..."></textarea>
+            <textarea id="generalNotes" rows="3" placeholder="Ej: tocar timbre, mandar cambio, sin servilletas..."></textarea>
           </div>
         </div>
       </div>
@@ -160,6 +159,45 @@
       </div>
     </div>
   </aside>
+
+  <div id="productModal" class="product-modal hidden">
+    <div class="product-modal-card">
+      <button id="closeModalBtn" class="modal-close-btn" type="button">✕</button>
+
+      <div class="modal-media">
+        <img id="modalImage" src="" alt="" />
+      </div>
+
+      <div class="modal-body">
+        <span id="modalBadge" class="modal-badge"></span>
+        <h3 id="modalTitle"></h3>
+        <p id="modalDescription"></p>
+        <div id="modalPrice" class="modal-price"></div>
+
+        <div class="field-inline">
+          <label for="modalOption">Elegí una opción</label>
+          <select id="modalOption" class="product-select"></select>
+        </div>
+
+        <div class="field-inline">
+          <label for="modalNote">Nota del producto</label>
+          <input id="modalNote" class="product-note" type="text" placeholder="Aclaración opcional" />
+        </div>
+
+        <div class="modal-qty-row">
+          <div class="qty-group big">
+            <button id="modalMinusBtn" class="qty-btn" type="button">−</button>
+            <span id="modalQtyValue" class="qty-value">1</span>
+            <button id="modalPlusBtn" class="qty-btn" type="button">+</button>
+          </div>
+
+          <button id="modalAddBtn" class="add-btn modal-add-btn" type="button">
+            Agregar al pedido
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="data.js"></script>
   <script src="app.js"></script>
