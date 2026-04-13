@@ -8,36 +8,120 @@
 </head>
 <body>
   <div class="app-shell">
-    <header class="hero">
-      <div class="hero-top">
-        <div class="brand-block">
-          <div class="brand-badge">🍔</div>
-          <div>
-            <h1 id="brandName">Food App</h1>
-            <p id="brandSubtitle">Tu comida favorita en minutos</p>
-          </div>
-        </div>
 
-        <button class="icon-btn" id="openCartTopBtn" type="button" aria-label="Abrir carrito">
-          <span>🛒</span>
-          <span class="cart-pill" id="cartCountTop">0</span>
+      <header class="hero">
+  <div class="hero-top glass-panel">
+    <div class="brand-block">
+      <div class="brand-badge glow-float">🍔</div>
+      <div>
+        <h1 id="brandName">Food App</h1>
+        <p id="brandSubtitle">Tu app de pedidos</p>
+      </div>
+    </div>
+
+    <button class="icon-btn glass-btn" id="openCartTopBtn" type="button" aria-label="Abrir carrito">
+      <span>🛒</span>
+      <span class="cart-pill" id="cartCountTop">0</span>
+    </button>
+  </div>
+
+  <div class="hero-main glass-panel">
+    <div class="hero-main-copy">
+      <span class="hero-kicker">APP DE PEDIDOS</span>
+      <h2>La carta digital de tu negocio, más visual y moderna</h2>
+      <p>
+        Mostrá tus productos, promociones, video del local y recibí pedidos por WhatsApp
+        de forma clara, rápida y profesional.
+      </p>
+
+      <div class="hero-cta-row">
+        <button class="hero-cta primary-hero-btn" type="button" onclick="document.getElementById('productsGrid').scrollIntoView({behavior:'smooth'})">
+          Ver menú
+        </button>
+        <button class="hero-cta secondary-hero-btn" type="button" id="openCartHeroBtn">
+          Mi pedido
         </button>
       </div>
+    </div>
 
-      <div class="hero-banner">
-        <div class="hero-banner-copy">
-          <span class="hero-kicker">PROMO DEL DÍA</span>
-          <h2 id="promoTitle">Combos, promos y delivery rápido</h2>
-          <p id="promoText">Elegí categoría, personalizá tu pedido y envialo por WhatsApp en segundos.</p>
+    <div class="hero-main-art floating-food">🍕</div>
+  </div>
+</header>
+
+<section class="media-showcase">
+  <div class="media-card video-card">
+    <div class="media-card-head">
+      <div>
+        <p class="section-kicker">VIDEO DEL NEGOCIO</p>
+        <h3>Presentá tu local o tus platos</h3>
+      </div>
+    </div>
+
+    <div class="video-frame">
+      <video class="business-video" id="heroVideo" autoplay muted loop playsinline preload="auto" poster="assets/img/hero-1.jpg">
+        <source src="assets/video/hero-food.mp4" type="video/mp4" />
+      </video>
+      <div class="video-gradient"></div>
+      <div class="video-label glass-mini">
+        🎥 Video destacado del negocio
+      </div>
+    </div>
+  </div>
+
+  <div class="media-card banner-card">
+    <div class="media-card-head">
+      <div>
+        <p class="section-kicker">PROMOCIONES</p>
+        <h3 id="promoTitle">Combos, promos y delivery rápido</h3>
+      </div>
+    </div>
+
+    <div class="promo-slider" id="heroSlider">
+      <div class="promo-slide active">
+        <img src="assets/img/hero1.jpg" alt="Promo 1" class="promo-slide-image" />
+        <div class="promo-slide-overlay"></div>
+        <div class="promo-slide-content">
+          <span class="promo-badge">PROMO DEL DÍA</span>
+          <h4>2x1 en pizzas grandes</h4>
+          <p>Ideal para destacar una promo principal del negocio.</p>
         </div>
-        <div class="hero-banner-art">🍕</div>
       </div>
 
-      <div class="search-wrap">
-        <span class="search-icon">🔎</span>
-        <input id="searchInput" class="search-input" type="text" placeholder="Buscar comida, bebida o promo..." />
+      <div class="promo-slide">
+        <img src="assets/img/hero2.jfif" alt="Promo 2" class="promo-slide-image" />
+        <div class="promo-slide-overlay"></div>
+        <div class="promo-slide-content">
+          <span class="promo-badge">DESTACADO</span>
+          <h4>Combos burger + papas</h4>
+          <p>Mostrá productos estrella con una estética más premium.</p>
+        </div>
       </div>
-    </header>
+
+      <div class="promo-slide">
+        <img src="assets/img/hero3.webp" alt="Promo 3" class="promo-slide-image" />
+        <div class="promo-slide-overlay"></div>
+        <div class="promo-slide-content">
+          <span class="promo-badge">NOVEDAD</span>
+          <h4>Pedidos rápidos por WhatsApp</h4>
+          <p>Una experiencia moderna sin necesidad de backend.</p>
+        </div>
+      </div>
+
+      <div class="promo-dots">
+        <span class="hero-dot active"></span>
+        <span class="hero-dot"></span>
+        <span class="hero-dot"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-wrap glass-search media-search">
+    <span class="search-icon">🔎</span>
+    <input id="searchInput" class="search-input" type="text" placeholder="Buscar comida, bebida o promo..." />
+  </div>
+</section>
+
+
 
     <main class="main-content">
       <section class="categories-section">

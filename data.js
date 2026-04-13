@@ -43,8 +43,8 @@ const PRODUCTS = [
     description: "Medallón, queso, lechuga, tomate y salsa especial.",
     price: 6800,
     badge: "Top",
-    image: makeFoodSvg("#ffd2c2", "#ff9a76", "🍔", "Clásica"),
-    options: ["Normal", "Sin lechuga", "Sin tomate", "Extra cheddar"]
+    image: "assets/img/burger_clasica.png",
+    options: ["x1 medallon 120g", "x2 medallon 120g", "x3 medallon 120g"]
   },
   {
     id: "burger_bacon",

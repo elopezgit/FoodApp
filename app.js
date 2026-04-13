@@ -7,6 +7,7 @@
     cart: [],
     currentProduct: null,
     modalQty: 1,
+    heroSlideIndex: 0,
     customer: {
       name: "",
       phone: "",
@@ -28,17 +29,23 @@
     productsTitle: document.getElementById("productsTitle"),
     productsSubtitle: document.getElementById("productsSubtitle"),
     resetCategoryBtn: document.getElementById("resetCategoryBtn"),
+
     bottomCartBar: document.getElementById("bottomCartBar"),
     openCartTopBtn: document.getElementById("openCartTopBtn"),
+    openCartHeroBtn: document.getElementById("openCartHeroBtn"),
+
     cartCountTop: document.getElementById("cartCountTop"),
     cartCountBottom: document.getElementById("cartCountBottom"),
+
     overlay: document.getElementById("overlay"),
     cartDrawer: document.getElementById("cartDrawer"),
     closeDrawerBtn: document.getElementById("closeDrawerBtn"),
+
     cartItems: document.getElementById("cartItems"),
     subtotalAmount: document.getElementById("subtotalAmount"),
     deliveryAmount: document.getElementById("deliveryAmount"),
     totalAmount: document.getElementById("totalAmount"),
+
     customerName: document.getElementById("customerName"),
     customerPhone: document.getElementById("customerPhone"),
     customerAddress: document.getElementById("customerAddress"),
@@ -46,9 +53,11 @@
     paymentMethod: document.getElementById("paymentMethod"),
     generalNotes: document.getElementById("generalNotes"),
     messagePreview: document.getElementById("messagePreview"),
+
     copyBtn: document.getElementById("copyBtn"),
     clearBtn: document.getElementById("clearBtn"),
     sendBtn: document.getElementById("sendBtn"),
+
     productModal: document.getElementById("productModal"),
     closeModalBtn: document.getElementById("closeModalBtn"),
     modalImage: document.getElementById("modalImage"),
@@ -61,7 +70,11 @@
     modalMinusBtn: document.getElementById("modalMinusBtn"),
     modalPlusBtn: document.getElementById("modalPlusBtn"),
     modalQtyValue: document.getElementById("modalQtyValue"),
-    modalAddBtn: document.getElementById("modalAddBtn")
+    modalAddBtn: document.getElementById("modalAddBtn"),
+
+    heroVideo: document.getElementById("heroVideo"),
+    promoSlides: document.querySelectorAll(".promo-slide"),
+    heroDots: document.querySelectorAll(".hero-dot")
   };
 
   function init() {
@@ -73,90 +86,147 @@
     updateCounts();
     updatePreview();
     toggleAddress();
+    initHeroSlider();
+    initHeroVideo();
   }
 
   function applyConfig() {
-    els.brandName.textContent = APP_CONFIG.businessName;
-    els.brandSubtitle.textContent = APP_CONFIG.subtitle;
-    els.promoTitle.textContent = APP_CONFIG.promoTitle;
-    els.promoText.textContent = APP_CONFIG.promoText;
+    if (els.brandName) els.brandName.textContent = APP_CONFIG.businessName;
+    if (els.brandSubtitle) els.brandSubtitle.textContent = APP_CONFIG.subtitle;
+    if (els.promoTitle) els.promoTitle.textContent = APP_CONFIG.promoTitle;
+    if (els.promoText) els.promoText.textContent = APP_CONFIG.promoText;
   }
 
   function bindEvents() {
-    els.searchInput.addEventListener("input", (e) => {
-      state.search = e.target.value.trim().toLowerCase();
-      renderProducts();
-    });
+    if (els.searchInput) {
+      els.searchInput.addEventListener("input", (e) => {
+        state.search = e.target.value.trim().toLowerCase();
+        renderProducts();
+      });
+    }
 
-    els.resetCategoryBtn.addEventListener("click", () => {
-      state.selectedCategory = null;
-      renderCategories();
-      renderProducts();
-    });
+    if (els.resetCategoryBtn) {
+      els.resetCategoryBtn.addEventListener("click", () => {
+        state.selectedCategory = null;
+        renderCategories();
+        renderProducts();
+      });
+    }
 
-    els.bottomCartBar.addEventListener("click", openDrawer);
-    els.openCartTopBtn.addEventListener("click", openDrawer);
-    els.closeDrawerBtn.addEventListener("click", closeDrawer);
-    els.overlay.addEventListener("click", closeDrawer);
+    if (els.bottomCartBar) els.bottomCartBar.addEventListener("click", openDrawer);
+    if (els.openCartTopBtn) els.openCartTopBtn.addEventListener("click", openDrawer);
+    if (els.openCartHeroBtn) els.openCartHeroBtn.addEventListener("click", openDrawer);
+    if (els.closeDrawerBtn) els.closeDrawerBtn.addEventListener("click", closeDrawer);
+    if (els.overlay) els.overlay.addEventListener("click", closeDrawer);
 
-    els.customerName.addEventListener("input", syncCustomer);
-    els.customerPhone.addEventListener("input", syncCustomer);
-    els.customerAddress.addEventListener("input", syncCustomer);
-    els.deliveryType.addEventListener("change", () => {
-      syncCustomer();
-      toggleAddress();
-      renderCart();
-      updatePreview();
-    });
-    els.paymentMethod.addEventListener("change", () => {
-      syncCustomer();
-      updatePreview();
-    });
-    els.generalNotes.addEventListener("input", () => {
-      syncCustomer();
-      updatePreview();
-    });
+    if (els.customerName) els.customerName.addEventListener("input", handleCustomerChange);
+    if (els.customerPhone) els.customerPhone.addEventListener("input", handleCustomerChange);
+    if (els.customerAddress) els.customerAddress.addEventListener("input", handleCustomerChange);
 
-    els.copyBtn.addEventListener("click", copyMessage);
-    els.clearBtn.addEventListener("click", clearOrder);
-    els.sendBtn.addEventListener("click", sendWhatsApp);
+    if (els.deliveryType) {
+      els.deliveryType.addEventListener("change", () => {
+        syncCustomer();
+        toggleAddress();
+        renderCart();
+        updatePreview();
+      });
+    }
 
-    els.cartItems.addEventListener("click", handleCartActions);
+    if (els.paymentMethod) {
+      els.paymentMethod.addEventListener("change", () => {
+        syncCustomer();
+        updatePreview();
+      });
+    }
 
-    els.closeModalBtn.addEventListener("click", closeModal);
-    els.modalMinusBtn.addEventListener("click", () => {
-      state.modalQty = Math.max(1, state.modalQty - 1);
-      updateModalQty();
+    if (els.generalNotes) {
+      els.generalNotes.addEventListener("input", () => {
+        syncCustomer();
+        updatePreview();
+      });
+    }
+
+    if (els.copyBtn) els.copyBtn.addEventListener("click", copyMessage);
+    if (els.clearBtn) els.clearBtn.addEventListener("click", clearOrder);
+    if (els.sendBtn) els.sendBtn.addEventListener("click", sendWhatsApp);
+
+    if (els.cartItems) {
+      els.cartItems.addEventListener("click", handleCartActions);
+    }
+
+    if (els.closeModalBtn) els.closeModalBtn.addEventListener("click", closeModal);
+
+    if (els.modalMinusBtn) {
+      els.modalMinusBtn.addEventListener("click", () => {
+        state.modalQty = Math.max(1, state.modalQty - 1);
+        updateModalQty();
+      });
+    }
+
+    if (els.modalPlusBtn) {
+      els.modalPlusBtn.addEventListener("click", () => {
+        state.modalQty += 1;
+        updateModalQty();
+      });
+    }
+
+    if (els.modalAddBtn) {
+      els.modalAddBtn.addEventListener("click", confirmModalAdd);
+    }
+
+    if (els.productModal) {
+      els.productModal.addEventListener("click", (event) => {
+        if (event.target === els.productModal) {
+          closeModal();
+        }
+      });
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        if (els.productModal && !els.productModal.classList.contains("hidden")) {
+          closeModal();
+          return;
+        }
+
+        if (els.cartDrawer && els.cartDrawer.classList.contains("open")) {
+          closeDrawer();
+        }
+      }
     });
-    els.modalPlusBtn.addEventListener("click", () => {
-      state.modalQty += 1;
-      updateModalQty();
-    });
-    els.modalAddBtn.addEventListener("click", confirmModalAdd);
+  }
+
+  function handleCustomerChange() {
+    syncCustomer();
+    updatePreview();
   }
 
   function syncCustomer() {
-    state.customer.name = els.customerName.value.trim();
-    state.customer.phone = els.customerPhone.value.trim();
-    state.customer.address = els.customerAddress.value.trim();
-    state.customer.deliveryType = els.deliveryType.value;
-    state.customer.paymentMethod = els.paymentMethod.value;
-    state.customer.generalNotes = els.generalNotes.value.trim();
+    state.customer.name = els.customerName ? els.customerName.value.trim() : "";
+    state.customer.phone = els.customerPhone ? els.customerPhone.value.trim() : "";
+    state.customer.address = els.customerAddress ? els.customerAddress.value.trim() : "";
+    state.customer.deliveryType = els.deliveryType ? els.deliveryType.value : "delivery";
+    state.customer.paymentMethod = els.paymentMethod ? els.paymentMethod.value : "Efectivo";
+    state.customer.generalNotes = els.generalNotes ? els.generalNotes.value.trim() : "";
   }
 
   function toggleAddress() {
-    const show = els.deliveryType.value === "delivery";
-    els.customerAddress.closest(".field").style.display = show ? "flex" : "none";
+    if (!els.customerAddress || !els.deliveryType) return;
+    const field = els.customerAddress.closest(".field");
+    if (!field) return;
+    field.style.display = els.deliveryType.value === "delivery" ? "flex" : "none";
   }
 
   function renderCategories() {
+    if (!els.categoriesGrid) return;
+
     els.categoriesGrid.innerHTML = CATEGORY_DATA.map((cat) => {
       const active = state.selectedCategory === cat.id ? "active" : "";
       return `
-        <button class="category-card ${active}" type="button" data-category="${cat.id}">
-          <div class="category-icon">${cat.icon}</div>
-          <h3 class="category-title">${cat.name}</h3>
-          <p class="category-copy">${cat.copy}</p>
+        <button class="category-card ${active}" type="button" data-category="${escapeHtml(cat.id)}">
+          <div class="category-icon">${escapeHtml(cat.icon)}</div>
+          <h3 class="category-title">${escapeHtml(cat.name)}</h3>
+          <p class="category-copy">${escapeHtml(cat.copy)}</p>
         </button>
       `;
     }).join("");
@@ -166,6 +236,7 @@
         state.selectedCategory = btn.dataset.category;
         renderCategories();
         renderProducts();
+        scrollProductsIntoView();
       });
     });
   }
@@ -179,55 +250,71 @@
         !s ||
         product.name.toLowerCase().includes(s) ||
         product.description.toLowerCase().includes(s) ||
-        product.badge.toLowerCase().includes(s);
+        product.badge.toLowerCase().includes(s) ||
+        product.options.some((opt) => opt.toLowerCase().includes(s));
 
       return matchCategory && matchSearch;
     });
   }
 
   function renderProducts() {
+    if (!els.productsGrid) return;
+
     const filtered = getFilteredProducts();
     const currentCategory = CATEGORY_DATA.find((c) => c.id === state.selectedCategory);
 
-    els.productsTitle.textContent = currentCategory ? currentCategory.name : "Destacados";
-    els.productsSubtitle.textContent = currentCategory
-      ? `Opciones disponibles en ${currentCategory.name.toLowerCase()}`
-      : "Productos listos para personalizar";
+    if (els.productsTitle) {
+      els.productsTitle.textContent = currentCategory ? currentCategory.name : "Destacados";
+    }
 
-    els.resetCategoryBtn.classList.toggle("hidden", !state.selectedCategory);
+    if (els.productsSubtitle) {
+      els.productsSubtitle.textContent = currentCategory
+        ? `Opciones disponibles en ${currentCategory.name.toLowerCase()}`
+        : "Productos listos para personalizar";
+    }
+
+    if (els.resetCategoryBtn) {
+      els.resetCategoryBtn.classList.toggle("hidden", !state.selectedCategory);
+    }
 
     if (!filtered.length) {
-      els.productsGrid.innerHTML = `<div class="empty-products">No encontramos productos para esa categoría.</div>`;
+      els.productsGrid.innerHTML = `
+        <div class="empty-products">
+          No encontramos productos para esa categoría o búsqueda.
+        </div>
+      `;
       return;
     }
 
     els.productsGrid.innerHTML = filtered.map((product) => {
       const categoryName = CATEGORY_DATA.find((c) => c.id === product.category)?.name || "";
+
       return `
         <article class="product-card">
           <div class="product-media">
-            <img src="${product.image}" alt="${product.name}">
-            <span class="product-tag">${product.badge}</span>
+            <img src="${product.image}" alt="${escapeHtml(product.name)}">
+            <span class="product-tag">${escapeHtml(product.badge)}</span>
           </div>
+
           <div class="product-body">
             <div class="product-top">
               <div>
-                <h3 class="product-name">${product.name}</h3>
-                <p class="product-desc">${product.description}</p>
+                <h3 class="product-name">${escapeHtml(product.name)}</h3>
+                <p class="product-desc">${escapeHtml(product.description)}</p>
               </div>
               <div class="product-price">${formatMoney(product.price)}</div>
             </div>
 
             <div class="product-meta">
-              <span class="meta-chip">${categoryName}</span>
+              <span class="meta-chip">${escapeHtml(categoryName)}</span>
               <span class="meta-chip">Personalizable</span>
             </div>
 
             <div class="product-actions">
-              <button class="add-btn" type="button" data-open-product="${product.id}">
+              <button class="add-btn" type="button" data-open-product="${escapeHtml(product.id)}">
                 Personalizar y agregar
               </button>
-              <div class="product-hint">Abrí el producto para elegir opción y nota</div>
+              <div class="product-hint">Elegí opción, nota y cantidad</div>
             </div>
           </div>
         </article>
@@ -241,36 +328,49 @@
 
   function openProductModal(productId) {
     const product = PRODUCTS.find((p) => p.id === productId);
-    if (!product) return;
+    if (!product || !els.productModal) return;
 
     state.currentProduct = product;
     state.modalQty = 1;
 
-    els.modalImage.src = product.image;
-    els.modalImage.alt = product.name;
-    els.modalBadge.textContent = product.badge;
-    els.modalTitle.textContent = product.name;
-    els.modalDescription.textContent = product.description;
-    els.modalPrice.textContent = formatMoney(product.price);
+    if (els.modalImage) {
+      els.modalImage.src = product.image;
+      els.modalImage.alt = product.name;
+    }
 
-    els.modalOption.innerHTML = product.options
-      .map((opt) => `<option value="${opt}">${opt}</option>`)
-      .join("");
+    if (els.modalBadge) els.modalBadge.textContent = product.badge;
+    if (els.modalTitle) els.modalTitle.textContent = product.name;
+    if (els.modalDescription) els.modalDescription.textContent = product.description;
+    if (els.modalPrice) els.modalPrice.textContent = formatMoney(product.price);
 
-    els.modalNote.value = "";
+    if (els.modalOption) {
+      els.modalOption.innerHTML = product.options
+        .map((opt) => `<option value="${escapeHtml(opt)}">${escapeHtml(opt)}</option>`)
+        .join("");
+    }
+
+    if (els.modalNote) {
+      els.modalNote.value = "";
+      els.modalNote.placeholder = getPlaceholderByCategory(product.category);
+    }
+
     updateModalQty();
-
     els.productModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
   }
 
   function closeModal() {
+    if (!els.productModal) return;
     els.productModal.classList.add("hidden");
     state.currentProduct = null;
     state.modalQty = 1;
+    document.body.style.overflow = "";
   }
 
   function updateModalQty() {
-    els.modalQtyValue.textContent = String(state.modalQty);
+    if (els.modalQtyValue) {
+      els.modalQtyValue.textContent = String(state.modalQty);
+    }
   }
 
   function confirmModalAdd() {
@@ -282,8 +382,8 @@
       productId: product.id,
       name: product.name,
       category: product.category,
-      option: els.modalOption.value,
-      note: els.modalNote.value.trim(),
+      option: els.modalOption ? els.modalOption.value : "",
+      note: els.modalNote ? els.modalNote.value.trim() : "",
       price: product.price,
       quantity: state.modalQty
     });
@@ -292,6 +392,7 @@
     renderCart();
     updateCounts();
     updatePreview();
+    openDrawer();
   }
 
   function handleCartActions(event) {
@@ -333,6 +434,8 @@
   }
 
   function renderCart() {
+    if (!els.cartItems) return;
+
     if (!state.cart.length) {
       els.cartItems.innerHTML = `
         <div class="empty-cart">
@@ -343,25 +446,26 @@
     } else {
       els.cartItems.innerHTML = state.cart.map((item) => {
         const total = item.price * item.quantity;
+
         return `
           <div class="cart-item">
             <div class="cart-item-top">
               <div>
-                <p class="cart-item-name">${item.name}</p>
-                <p class="cart-item-variant">${item.option}</p>
+                <p class="cart-item-name">${escapeHtml(item.name)}</p>
+                <p class="cart-item-variant">${escapeHtml(item.option)}</p>
               </div>
               <div class="cart-item-price">${formatMoney(total)}</div>
             </div>
 
-            ${item.note ? `<p class="cart-item-note">📝 ${item.note}</p>` : ""}
+            ${item.note ? `<p class="cart-item-note">📝 ${escapeHtml(item.note)}</p>` : ""}
 
             <div class="cart-item-actions">
               <div class="qty-group">
-                <button class="qty-btn" type="button" data-minus="${item.uid}">−</button>
+                <button class="qty-btn" type="button" data-minus="${escapeHtml(item.uid)}">−</button>
                 <span class="qty-value">${item.quantity}</span>
-                <button class="qty-btn" type="button" data-plus="${item.uid}">+</button>
+                <button class="qty-btn" type="button" data-plus="${escapeHtml(item.uid)}">+</button>
               </div>
-              <button class="remove-btn" type="button" data-remove="${item.uid}">Quitar</button>
+              <button class="remove-btn" type="button" data-remove="${escapeHtml(item.uid)}">Quitar</button>
             </div>
           </div>
         `;
@@ -372,9 +476,9 @@
     const delivery = getDeliveryCost();
     const total = subtotal + delivery;
 
-    els.subtotalAmount.textContent = formatMoney(subtotal);
-    els.deliveryAmount.textContent = formatMoney(delivery);
-    els.totalAmount.textContent = formatMoney(total);
+    if (els.subtotalAmount) els.subtotalAmount.textContent = formatMoney(subtotal);
+    if (els.deliveryAmount) els.deliveryAmount.textContent = formatMoney(delivery);
+    if (els.totalAmount) els.totalAmount.textContent = formatMoney(total);
   }
 
   function getSubtotal() {
@@ -389,8 +493,8 @@
 
   function updateCounts() {
     const count = state.cart.reduce((acc, item) => acc + item.quantity, 0);
-    els.cartCountTop.textContent = count;
-    els.cartCountBottom.textContent = count;
+    if (els.cartCountTop) els.cartCountTop.textContent = count;
+    if (els.cartCountBottom) els.cartCountBottom.textContent = count;
   }
 
   function buildMessage() {
@@ -422,14 +526,20 @@
     text += `👤 *Nombre:* ${state.customer.name || "-"}\n`;
 
     if (state.customer.phone) text += `📱 *Teléfono:* ${state.customer.phone}\n`;
-    if (state.customer.deliveryType === "delivery") text += `📍 *Dirección:* ${state.customer.address || "-"}\n`;
-    if (state.customer.generalNotes) text += `📝 *Notas generales:* ${state.customer.generalNotes}\n`;
+    if (state.customer.deliveryType === "delivery") {
+      text += `📍 *Dirección:* ${state.customer.address || "-"}\n`;
+    }
+    if (state.customer.generalNotes) {
+      text += `📝 *Notas generales:* ${state.customer.generalNotes}\n`;
+    }
 
     return text.trim();
   }
 
   function updatePreview() {
-    els.messagePreview.value = buildMessage();
+    if (els.messagePreview) {
+      els.messagePreview.value = buildMessage();
+    }
   }
 
   async function copyMessage() {
@@ -438,19 +548,37 @@
       return;
     }
 
-    await navigator.clipboard.writeText(buildMessage());
-    alert("Pedido copiado.");
+    try {
+      await navigator.clipboard.writeText(buildMessage());
+      alert("Pedido copiado.");
+    } catch (error) {
+      if (els.messagePreview) {
+        els.messagePreview.select();
+        document.execCommand("copy");
+      }
+      alert("Pedido copiado.");
+    }
   }
 
   function clearOrder() {
     state.cart = [];
-    els.customerName.value = "";
-    els.customerPhone.value = "";
-    els.customerAddress.value = "";
-    els.generalNotes.value = "";
-    els.deliveryType.value = "delivery";
-    els.paymentMethod.value = "Efectivo";
-    syncCustomer();
+    state.customer = {
+      name: "",
+      phone: "",
+      address: "",
+      deliveryType: "delivery",
+      paymentMethod: "Efectivo",
+      generalNotes: ""
+    };
+
+    if (els.customerName) els.customerName.value = "";
+    if (els.customerPhone) els.customerPhone.value = "";
+    if (els.customerAddress) els.customerAddress.value = "";
+    if (els.generalNotes) els.generalNotes.value = "";
+    if (els.deliveryType) els.deliveryType.value = "delivery";
+    if (els.paymentMethod) els.paymentMethod.value = "Efectivo";
+
+    toggleAddress();
     renderCart();
     updateCounts();
     updatePreview();
@@ -479,13 +607,70 @@
   }
 
   function openDrawer() {
-    els.cartDrawer.classList.add("open");
-    els.overlay.classList.add("show");
+    if (els.cartDrawer) els.cartDrawer.classList.add("open");
+    if (els.overlay) els.overlay.classList.add("show");
+    document.body.style.overflow = "hidden";
   }
 
   function closeDrawer() {
-    els.cartDrawer.classList.remove("open");
-    els.overlay.classList.remove("show");
+    if (els.cartDrawer) els.cartDrawer.classList.remove("open");
+    if (els.overlay) els.overlay.classList.remove("show");
+    document.body.style.overflow = "";
+  }
+
+  function initHeroSlider() {
+    if (!els.promoSlides.length) return;
+
+    function showSlide(index) {
+      els.promoSlides.forEach((slide, i) => {
+        slide.classList.toggle("active", i === index);
+      });
+
+      els.heroDots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === index);
+      });
+    }
+
+    showSlide(state.heroSlideIndex);
+
+    setInterval(() => {
+      state.heroSlideIndex = (state.heroSlideIndex + 1) % els.promoSlides.length;
+      showSlide(state.heroSlideIndex);
+    }, 3500);
+  }
+
+  function initHeroVideo() {
+    if (!els.heroVideo) return;
+
+    const tryPlay = () => {
+      const promise = els.heroVideo.play();
+      if (promise && typeof promise.then === "function") {
+        promise.catch(() => {
+          // silencio intencional
+        });
+      }
+    };
+
+    els.heroVideo.addEventListener("loadeddata", tryPlay);
+    tryPlay();
+  }
+
+  function scrollProductsIntoView() {
+    if (!els.productsGrid) return;
+    els.productsGrid.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function getPlaceholderByCategory(category) {
+    const placeholders = {
+      burgers: "Ej: sin lechuga, extra cheddar",
+      pizzas: "Ej: mitad napo, sin aceitunas",
+      milanesas: "Ej: pan árabe, sin tomate",
+      empanadas: "Ej: 4 carne, 4 pollo, 4 jamón y queso",
+      bebidas: "Ej: bien fría",
+      promos: "Ej: cambiar bebida por sin azúcar"
+    };
+
+    return placeholders[category] || "Aclaración opcional";
   }
 
   function formatMoney(value) {
@@ -494,6 +679,15 @@
 
   function createId() {
     return `id_${Math.random().toString(36).slice(2, 10)}`;
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
   }
 
   init();
