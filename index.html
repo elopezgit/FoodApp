@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Food App</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero">
+      <div class="hero-top">
+        <div class="brand-block">
+          <div class="brand-badge">🍔</div>
+          <div>
+            <h1 id="brandName">Food App</h1>
+            <p id="brandSubtitle">Tu comida favorita en minutos</p>
+          </div>
+        </div>
+
+        <button class="icon-btn" id="openCartTopBtn" type="button" aria-label="Abrir carrito">
+          <span>🛒</span>
+          <span class="cart-pill" id="cartCountTop">0</span>
+        </button>
+      </div>
+
+      <div class="hero-banner">
+        <div class="hero-banner-copy">
+          <span class="hero-kicker">PROMO DEL DÍA</span>
+          <h2 id="promoTitle">2x1 en pizzas grandes</h2>
+          <p id="promoText">Pedí tu combo favorito y armá el pedido por WhatsApp en segundos.</p>
+        </div>
+        <div class="hero-banner-art">🍕</div>
+      </div>
+
+      <div class="search-wrap">
+        <span class="search-icon">🔎</span>
+        <input id="searchInput" class="search-input" type="text" placeholder="Buscar comida, bebida o promo..." />
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="categories-section">
+        <div class="section-head">
+          <div>
+            <h2>Categorías</h2>
+            <p>Elegí una categoría para ver el menú</p>
+          </div>
+        </div>
+
+        <div class="categories-grid" id="categoriesGrid"></div>
+      </section>
+
+      <section class="products-section">
+        <div class="section-head">
+          <div>
+            <h2 id="productsTitle">Destacados</h2>
+            <p id="productsSubtitle">Productos listos para personalizar</p>
+          </div>
+          <button id="resetCategoryBtn" class="ghost-btn hidden" type="button">Ver todo</button>
+        </div>
+
+        <div class="products-grid" id="productsGrid"></div>
+      </section>
+    </main>
+
+    <button id="bottomCartBar" class="bottom-cart-bar" type="button">
+      <span class="bottom-cart-main">🛒 Ver pedido</span>
+      <span class="bottom-cart-count" id="cartCountBottom">0</span>
+    </button>
+  </div>
+
+  <div id="overlay" class="overlay"></div>
+
+  <aside id="cartDrawer" class="cart-drawer" aria-label="Carrito">
+    <div class="drawer-top">
+      <div class="drawer-header">
+        <div>
+          <p class="drawer-kicker">PEDIDO</p>
+          <h3>Tu carrito</h3>
+        </div>
+        <button id="closeDrawerBtn" class="close-btn" type="button" aria-label="Cerrar carrito">✕</button>
+      </div>
+    </div>
+
+    <div class="drawer-scroll">
+      <div id="cartItems" class="cart-items"></div>
+
+      <div class="summary-card">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <strong id="subtotalAmount">$0</strong>
+        </div>
+        <div class="summary-row">
+          <span>Envío</span>
+          <strong id="deliveryAmount">$0</strong>
+        </div>
+        <div class="summary-row total-row">
+          <span>Total</span>
+          <strong id="totalAmount">$0</strong>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-grid">
+          <div class="field">
+            <label for="customerName">Nombre</label>
+            <input id="customerName" type="text" placeholder="Ej: Esteban López" />
+          </div>
+
+          <div class="field">
+            <label for="deliveryType">Entrega</label>
+            <select id="deliveryType">
+              <option value="delivery">Delivery</option>
+              <option value="retiro">Retiro en local</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label for="customerAddress">Dirección</label>
+            <input id="customerAddress" type="text" placeholder="Ej: Av. Siempre Viva 123, Tucumán" />
+          </div>
+
+          <div class="field">
+            <label for="paymentMethod">Pago</label>
+            <select id="paymentMethod">
+              <option value="Efectivo">Efectivo</option>
+              <option value="Transferencia">Transferencia</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="customerPhone">Teléfono</label>
+            <input id="customerPhone" type="text" placeholder="381..." />
+          </div>
+
+          <div class="field full">
+            <label for="generalNotes">Notas generales</label>
+            <textarea id="generalNotes" rows="3" placeholder="Ej: tocar timbre, sin servilletas, mandar cambio de $20.000..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-card">
+        <div class="preview-head">
+          <div>
+            <p class="drawer-kicker">VISTA PREVIA</p>
+            <h4>Mensaje final</h4>
+          </div>
+        </div>
+        <textarea id="messagePreview" class="preview-textarea" rows="10" readonly></textarea>
+      </div>
+    </div>
+
+    <div class="drawer-bottom">
+      <div class="drawer-actions">
+        <button id="copyBtn" class="secondary-btn" type="button">📋 Copiar</button>
+        <button id="clearBtn" class="secondary-btn danger" type="button">🧹 Limpiar</button>
+        <button id="sendBtn" class="primary-btn" type="button">📲 Enviar por WhatsApp</button>
+      </div>
+    </div>
+  </aside>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
